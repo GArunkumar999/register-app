@@ -6,6 +6,9 @@ pipeline{
         maven 'Maven3'
         jdk 'Java17'
     }
+    parameters{
+        string(name: 'IMAGE_TAG', description: 'Who should I say hello to?')
+    }
     stages{
         stage('cleanup Workspace'){
             steps{
@@ -27,6 +30,18 @@ pipeline{
             steps{
                 sh "mvn test"
             }
+        }
+        stage('build image'){
+            steps {
+               withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                 sh """
+                    docker build -t arun596/registerapp:${IMAGE_TAG} .
+                    echo "\$DOCKER_PASS" | docker login -u "\$DOCKER_USER" --password-stdin
+                  """
+                }
+            }
+
+            
         }
 
     }
