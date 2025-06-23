@@ -37,6 +37,8 @@ pipeline{
                  sh """
                     docker build -t arun596/registerapp:${IMAGE_TAG} .
                     echo "\$DOCKER_PASS" | docker login -u "\$DOCKER_USER" --password-stdin
+                    docker push arun596/registerapp:${IMAGE_TAG}
+                    docker rmi arun596/registerapp:${IMAGE_TAG}
                   """
                 }
             }
