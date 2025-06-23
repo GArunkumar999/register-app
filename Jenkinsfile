@@ -33,7 +33,7 @@ pipeline{
         }
         stage('build image'){
             steps {
-               withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+               withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                  sh """
                     docker build -t arun596/registerapp:${IMAGE_TAG} .
                     echo "\$DOCKER_PASS" | docker login -u "\$DOCKER_USER" --password-stdin
