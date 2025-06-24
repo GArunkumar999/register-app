@@ -8,6 +8,7 @@ pipeline{
     }
     environment{
          APP_NAME = "register-app-pipeline"
+         JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
     }
     parameters{
         string(name: 'IMAGE_TAG', description: 'Who should I say hello to?')
@@ -62,6 +63,13 @@ pipeline{
                     sh "docker rmi arun596/registerapp:${IMAGE_TAG}"
                }
           }
+       }
+        stage("Trigger CD Pipeline") {
+            steps {
+                script {
+                    sh "curl -v -k --user clouduser:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'ec2-13-232-128-192.ap-south-1.compute.amazonaws.com:8080/job/gitops-register-app-cd/buildWithParameters?token=gitops-token'"
+                }
+            }
        }
 
 
