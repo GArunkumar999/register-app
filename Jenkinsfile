@@ -6,6 +6,9 @@ pipeline{
         maven 'Maven3'
         jdk 'Java17'
     }
+    environment{
+         APP_NAME = "register-app-pipeline"
+    }
     parameters{
         string(name: 'IMAGE_TAG', description: 'Who should I say hello to?')
     }
@@ -60,6 +63,7 @@ pipeline{
                }
           }
        }
+
 
     }
 }
