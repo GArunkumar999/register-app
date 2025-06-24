@@ -38,13 +38,28 @@ pipeline{
                     docker build -t arun596/registerapp:${IMAGE_TAG} .
                     echo "\$DOCKER_PASS" | docker login -u "\$DOCKER_USER" --password-stdin
                     docker push arun596/registerapp:${IMAGE_TAG}
-                    docker rmi arun596/registerapp:${IMAGE_TAG}
+                    
                   """
                 }
             }
 
             
         }
+        stage("Trivy Scan") {
+           steps {
+               script {
+	            sh ('docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image arun596/register-app:${IMAGE_TAG} --no-progress --scanners vuln  --exit-code 0 --severity HIGH,CRITICAL --format table')
+               }
+           }
+       }
+
+       stage ('Cleanup Artifacts') {
+           steps {
+               script {
+                    sh "docker rmi arun596/registerapp:${IMAGE_TAG}"
+               }
+          }
+       }
 
     }
 }
