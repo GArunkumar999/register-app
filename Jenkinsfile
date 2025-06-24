@@ -9,9 +9,7 @@ pipeline{
     environment{
          APP_NAME = "register-app-pipeline"
          JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
-    }
-    parameters{
-        string(name: 'IMAGE_TAG', description: 'Who should I say hello to?')
+         IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
     }
     stages{
         stage('cleanup Workspace'){
@@ -64,13 +62,13 @@ pipeline{
                }
           }
        }
-        stage("Trigger CD Pipeline") {
-            steps {
-                script {
-                    sh "curl -v -k --user admin:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'http://ec2-54-90-71-191.compute-1.amazonaws.com:8080/job/register-app-cd/buildWithParameters?token=gitops-token'"
+            stage("Trigger CD Pipeline") {
+                steps {
+                    script {
+                        sh "curl -v -k --user admin:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'http://ec2-54-90-71-191.compute-1.amazonaws.com:8080/job/register-app-cd/buildWithParameters?token=gitops-token'"
+                    }
                 }
-            }
-       }
+        }
     }
     post {
         success {
