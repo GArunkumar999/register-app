@@ -35,7 +35,6 @@
    <br>
    <h1> Happy Learning. See You Again. </h1>
    <h1> CICD PROJECT COMPLETED </h1>
-   <h1> BYE </h1>
 
 
    
