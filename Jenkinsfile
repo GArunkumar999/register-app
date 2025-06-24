@@ -71,7 +71,17 @@ pipeline{
                 }
             }
        }
-
-
     }
+    post {
+        success {
+           echo "CI pipeline completed. CD pipeline triggered successfully."
+        }
+        failure {
+           echo "CI pipeline failed. Check logs for errors."
+        }
+    }
+
+
+
+    
 }
